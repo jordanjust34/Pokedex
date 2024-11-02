@@ -34,11 +34,11 @@ your code working.
     // Including their index number
     // Pokemon Name
     // Pokemon Type
-typedef struct{
+struct Pokemon{
     int num;
     char name[20];
     char type[10];
-} pokemon;
+};
 
 // Prints the main menu for all actions available 
 void mainMenu(){
@@ -51,46 +51,33 @@ void mainMenu(){
 
 void listPokedex(FILE* fp){
     system("cls");
-    fp = fopen("pokemon.bin", "rb");
 
     char string[100];
 
     fgets(string, 100, fp);
     printf("%s", string);
-
-    fclose(fp);
 }
 
 void addPokemon(FILE* fp){
-    pokemon newPoke;
+    struct Pokemon newPokemon;
     system("cls");
 
-    fp = fopen("pokemon.bin", "ab");
-
-    if(fp == NULL){
-        printf("ERROR");
-        exit(1);
-    }
-
     printf("Name of Pokemon: ");
-    scanf("%s", newPoke.name);
+    scanf("%s", newPokemon.name);
 
-    printf("%s's Type: ", newPoke.name);
-    scanf("%s", newPoke.type);
-
-    size_t nameSize = sizeof(newPoke.name) / sizeof(newPoke.name[0]);
-    size_t typeSize = sizeof(newPoke.type) / sizeof(newPoke.type[0]);
-
-    fwrite(&newPoke.name, sizeof(char), nameSize, fp);
-    fwrite(&newPoke.type, sizeof(char), typeSize, fp);
-
-    fclose(fp);
+    printf("%s's Type: ", newPokemon.name);
+    scanf("%s", newPokemon.type);
 }
 
 
 int main(){
     char user = 'a';
-    FILE* fp;
+    FILE* fp = fopen("pokemon.bin", "rb+");
+
+    if(fp == NULL){
+        printf("File Error.");
+        exit(1);
+    }
 
     while(user != 'x'){
         system("cls");
@@ -101,9 +88,6 @@ int main(){
         switch(user){
             case '1':
                 listPokedex(fp);
-                while(user == '1'){
-                    scanf("%c", user);
-                }
                 break;
             case '2':
                 addPokemon(fp);
@@ -117,10 +101,7 @@ int main(){
         }
 
     }
-
-    if(fp != NULL){
-        fclose(fp);
-    }
+    fclose(fp);
 
     printf("Closing...");
     return 0;
