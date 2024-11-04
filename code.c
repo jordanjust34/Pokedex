@@ -103,7 +103,6 @@ int main(){
 
         switch(user){
             case '1':
-                findPokemon(fp);
                 break;
             case '2':
                 addPokemon(fp);
@@ -111,6 +110,7 @@ int main(){
             case '3':
                 break;
             case '4':
+                findPokemon(fp);
                 break;
             case '0':
                 break;
