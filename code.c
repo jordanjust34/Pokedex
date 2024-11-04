@@ -34,75 +34,94 @@ your code working.
     // Including their index number
     // Pokemon Name
     // Pokemon Type
-struct Pokemon{
-    int num;
+typedef struct{ 
+    int index;
     char name[20];
     char type[10];
-};
+}Pokemon;
 
 // Prints the main menu for all actions available 
 void mainMenu(){
     printf("\t\t\t---POKEDEX---\n\n");
     printf("(1) List all Pokemon.\n");
     printf("(2) Add a Pokemon.\n");
-    printf("(3) Find Pokemon.\n\n");
-    printf("(x) Exit Program.\n");
+    printf("(3) Find Pokemon.\n");
+    printf("(4) Search Pokedex.\n\n");
+    printf("(0) Exit Program.\n");
 }
 
-void listPokedex(FILE* fp){
+void findPokemon(FILE* fp){
     system("cls");
 
-    char string[100];
+    Pokemon newPokemon;
 
-    fgets(string, 100, fp);
-    printf("%s", string);
+    int user;
+
+    printf("Pokemon Number: ");
+    scanf("%d", &user);
+
+    
 }
 
+// Allows user to add a new Pokemon to the Pokedex
 void addPokemon(FILE* fp){
-    struct Pokemon newPokemon;
     system("cls");
 
-    printf("Name of Pokemon: ");
-    scanf("%s", newPokemon.name);
+    Pokemon newPokemon;
 
-    printf("%s's Type: ", newPokemon.name);
-    scanf("%s", newPokemon.type);
+    printf("Pokemon Number: ");
+    scanf("%d", &newPokemon.index);
+
+    printf("Pokemon Name: ");
+    scanf("%s", &newPokemon.name);
+
+    printf("%s,s Type: ", newPokemon.name);
+    scanf("%s", &newPokemon.type);
+
+    // Prints the data into the bin file
+    size_t writtenstruct = fwrite(&newPokemon, sizeof(Pokemon), 1, fp);
 }
 
 
 int main(){
-    char user = 'a';
-    FILE* fp = fopen("pokemon.bin", "rb+");
+    char user;
+    FILE* fp = fopen("pokemon.bin", "wb+");
 
-    if(fp == NULL){
-        printf("File Error.");
-        exit(1);
-    }
 
-    while(user != 'x'){
+    while(user != '0'){
         system("cls");
+
+        if(fp == NULL){
+            printf("File Error.");
+            exit(1);
+        }
+
         mainMenu();
 
         scanf("%c", &user);
 
+
         switch(user){
             case '1':
-                listPokedex(fp);
+                findPokemon(fp);
                 break;
             case '2':
                 addPokemon(fp);
                 break;
             case '3':
                 break;
-            case 'x':
+            case '4':
+                break;
+            case '0':
                 break;
             default:
-                printf("Please pick one of the options from the list: 1 2 3 x\n");
+                printf("Please pick one of the options from the list: 1 2 3 4 0\n");
         }
 
     }
-    fclose(fp);
+    if(fp == NULL){
+        fclose(fp);
+    }
 
-    printf("Closing...");
     return 0;
 }
