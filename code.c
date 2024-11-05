@@ -90,6 +90,9 @@ void addPokemon(FILE* fp){
     size_t writtenstruct = fwrite(&newPokemon, sizeof(Pokemon), 1, fp);
 }
 
+void editPokemon(FILE* fp){
+    
+}
 
 int main(){
     char user;
