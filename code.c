@@ -54,21 +54,14 @@ void mainMenu(){
 void findPokemon(FILE* fp){
     Pokemon findPokemon;
     int user;
-    fpos_t point;
-    fpos_t foundPoint;
-    char string[100];
 
     printf("Enter Pokemon Number: ");
     scanf("%d", &user);
 
-    while(user != findPokemon.index || fgetpos != NULL){
-        fpos_t point = fseek(fp, sizeof(Pokemon), SEEK_SET);
+    while(fread(&findPokemon, sizeof(Pokemon), 1, fp) == user){
+        printf("%d\n%s\n%s\n", findPokemon.index, findPokemon.name, findPokemon.type);
     }
-    if(user == findPokemon.index){
-        fgetpos(fp, foundPoint);
-        fgets(string, sizeof(Pokemon), fp);
-        printf("&s", string);
-    }       
+
 }
 
 // Allows user to add a new Pokemon to the Pokedex
@@ -91,7 +84,7 @@ void addPokemon(FILE* fp){
 }
 
 void editPokemon(FILE* fp){
-    
+
 }
 
 int main(){
@@ -119,9 +112,9 @@ int main(){
                 addPokemon(fp);
                 break;
             case '3':
+                findPokemon(fp);
                 break;
             case '4':
-                findPokemon(fp);
                 break;
             case '0':
                 break;
