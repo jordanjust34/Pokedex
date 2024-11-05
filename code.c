@@ -50,17 +50,25 @@ void mainMenu(){
     printf("(0) Exit Program.\n");
 }
 
+// Can't get this to work, might be to complex
 void findPokemon(FILE* fp){
-    system("cls");
-
-    Pokemon newPokemon;
-
+    Pokemon findPokemon;
     int user;
+    fpos_t point;
+    fpos_t foundPoint;
+    char string[100];
 
-    printf("Pokemon Number: ");
+    printf("Enter Pokemon Number: ");
     scanf("%d", &user);
 
-    
+    while(user != findPokemon.index || fgetpos != NULL){
+        fpos_t point = fseek(fp, sizeof(Pokemon), SEEK_SET);
+    }
+    if(user == findPokemon.index){
+        fgetpos(fp, foundPoint);
+        fgets(string, sizeof(Pokemon), fp);
+        printf("&s", string);
+    }       
 }
 
 // Allows user to add a new Pokemon to the Pokedex
