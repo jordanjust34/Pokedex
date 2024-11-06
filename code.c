@@ -36,95 +36,88 @@ your code working.
     // Pokemon Type
 typedef struct{ 
     int index;
-    char name[20];
-    char type[10];
+    char name[50];
+    char type[50];
 }Pokemon;
 
-// Prints the main menu for all actions available 
-void mainMenu(){
-    printf("\t\t\t---POKEDEX---\n\n");
-    printf("(1) List all Pokemon.\n");
-    printf("(2) Add a Pokemon.\n");
-    printf("(3) Find Pokemon.\n");
-    printf("(4) Search Pokedex.\n\n");
-    printf("(0) Exit Program.\n");
+// Print Menu
+void printMenu(){
+    printf("=======POKEDEX=======\n\n");
+    printf("(1) Add Pokemon.\n");
+    printf("(2) Search Pokedex.\n");
+    printf("(3) Edit Pokedex Entry.\n\n");
+    printf("(0) Exit Pokedex.\n\n");
 }
 
-// Can't get this to work, might be to complex
-void findPokemon(FILE* fp){
-    Pokemon findPokemon;
-    int user;
-
-    printf("Enter Pokemon Number: ");
-    scanf("%d", &user);
-
-    while(fread(&findPokemon, sizeof(Pokemon), 1, fp) == user){
-        printf("%d\n%s\n%s\n", findPokemon.index, findPokemon.name, findPokemon.type);
-    }
-
-}
-
-// Allows user to add a new Pokemon to the Pokedex
-void addPokemon(FILE* fp){
-    system("cls");
-
+// Insert new file entry at the end of file
+void addPokemon(FILE *fp){
     Pokemon newPokemon;
 
-    printf("Pokemon Number: ");
-    scanf("%d", &newPokemon.index);
-
     printf("Pokemon Name: ");
-    scanf("%s", &newPokemon.name);
+    scanf("%s", newPokemon.name);
 
-    printf("%s,s Type: ", newPokemon.name);
-    scanf("%s", &newPokemon.type);
+    printf("%s's Type; ", newPokemon.name);
+    scanf("%s", newPokemon.type);
 
-    // Prints the data into the bin file
-    size_t writtenstruct = fwrite(&newPokemon, sizeof(Pokemon), 1, fp);
+    fseek(fp, 0, SEEK_END);
+    fwrite(&newPokemon, sizeof(Pokemon), 1, fp);
 }
 
-void editPokemon(FILE* fp){
+// Find and Read data from a Pokemon
+void readPokemon(FILE *fp, int index){
+    Pokemon readPokemon;
+
+    fseek(fp, index * sizeof(Pokemon), SEEK_SET);
+
+    printf("%s\n%s", readPokemon.name, readPokemon.type);
+}
+
+// Edit existing Pokemon data
+void editPokemon(FILE *fp, int index){
 
 }
 
-int main(){
-    char user;
-    FILE* fp = fopen("pokemon.bin", "wb+");
+int main(int argc, char *argv[]){
 
+    // Opens the file in rb+, if it's not made it'll make with wb+, of that fails it'll close the program
+    FILE* fp = fopen(argv[1], "wb+");
 
-    while(user != '0'){
+    if(fp == NULL){
+        printf("ERROR");
+        return 1;
+    }    
+
+    int user, index;
+
+    while(1){
+        printMenu();
+        scanf("%d", &user);
+
         system("cls");
 
-        if(fp == NULL){
-            printf("File Error.");
-            exit(1);
-        }
-
-        mainMenu();
-
-        scanf("%c", &user);
-
-
         switch(user){
-            case '1':
-                break;
-            case '2':
+            case 1:
                 addPokemon(fp);
                 break;
-            case '3':
-                findPokemon(fp);
+            case 2:
+                printf("Enter Pokemon Index Number: ");
+                scanf("%d", &index);
+                system("cls");
+                readPokemon(fp, index);
                 break;
-            case '4':
+            case 3:
+                printf("Enter Pokemon Index Number: ");
+                scanf("%d", &index);
+                system("cls");
+                editPokemon(fp, index);
                 break;
-            case '0':
+            case 4:
+                fclose(fp);
+                return 1;
                 break;
             default:
-                printf("Please pick one of the options from the list: 1 2 3 4 0\n");
+                printf("Please select options 1 - 4.\n");
         }
-
-    }
-    if(fp == NULL){
-        fclose(fp);
     }
 
     return 0;
