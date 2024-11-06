@@ -53,10 +53,12 @@ void printMenu(){
 void addPokemon(FILE *fp){
     Pokemon newPokemon;
 
+    newPokemon.index = 
+
     printf("Pokemon Name: ");
     scanf("%s", newPokemon.name);
 
-    printf("%s's Type; ", newPokemon.name);
+    printf("%s's Type: ", newPokemon.name);
     scanf("%s", newPokemon.type);
 
     fseek(fp, 0, SEEK_END);
@@ -67,25 +69,56 @@ void addPokemon(FILE *fp){
 void readPokemon(FILE *fp, int index){
     Pokemon readPokemon;
 
+    printf("Enter Pokemon Index Number: ");
+    scanf("%d", &index);
+    system("cls");
+
     fseek(fp, index * sizeof(Pokemon), SEEK_SET);
 
-    printf("%s\n%s", readPokemon.name, readPokemon.type);
+    fread(&readPokemon, sizeof(Pokemon), 1, fp);
+
+    printf("Index Number: %d\n", index);
+    printf("Pokemon: %s\n", readPokemon.name);
+    printf("Type: %s\n\n", readPokemon.type);
 }
 
 // Edit existing Pokemon data
 void editPokemon(FILE *fp, int index){
+    Pokemon editPokemon;
 
+    printf("Enter Pokemon Index Number: ");
+    scanf("%d", &index);
+    system("cls");
+
+    fseek(fp, index * sizeof(Pokemon), SEEK_SET);
+
+    fread(&readPokemon, sizeof(Pokemon), 1, fp);
+
+    printf("Index Number: %d\n", index);
+    printf("Pokemon: %s\n", editPokemon.name);
+    printf("Type: %s\n\n", editPokemon.type);
+
+
+    printf("Change %s's Name: ");
+    scanf("%s", editPokemon.name);
+
+    printf("Change %s's Type: ");
+    scanf("%s", editPokemon.type);
+
+    fseek(fp, index * sizeof(Pokemon), SEEK_SET);
+    fwrite(&editPokemon, sizeof(Pokemon), 1, fp);
+    
 }
 
 int main(int argc, char *argv[]){
 
-    // Opens the file in rb+, if it's not made it'll make with wb+, of that fails it'll close the program
-    FILE* fp = fopen(argv[1], "wb+");
-
-    if(fp == NULL){
-        printf("ERROR");
-        return 1;
-    }    
+    // Opens in "rb+" if a file is their, will open/create with "wb+" if no file is their
+    FILE* fp;
+    if(fp != NULL){
+        fp = fopen(argv[1], "rb+");
+    }else{
+        fp = fopen(argv[1], "wb+");
+    }
 
     int user, index;
 
@@ -100,21 +133,14 @@ int main(int argc, char *argv[]){
                 addPokemon(fp);
                 break;
             case 2:
-                printf("Enter Pokemon Index Number: ");
-                scanf("%d", &index);
-                system("cls");
                 readPokemon(fp, index);
                 break;
             case 3:
-                printf("Enter Pokemon Index Number: ");
-                scanf("%d", &index);
-                system("cls");
                 editPokemon(fp, index);
                 break;
-            case 4:
+            case 0:
                 fclose(fp);
                 return 1;
-                break;
             default:
                 printf("Please select options 1 - 4.\n");
         }
