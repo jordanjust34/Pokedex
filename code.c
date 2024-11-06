@@ -43,6 +43,7 @@ typedef struct{
 // Print Menu
 void printMenu(){
     printf("=======POKEDEX=======\n\n");
+    printf("Index Starts at 1.\n\n");
     printf("(1) Add Pokemon.\n");
     printf("(2) Search Pokedex.\n");
     printf("(3) Edit Pokedex Entry.\n\n");
@@ -52,8 +53,6 @@ void printMenu(){
 // Insert new file entry at the end of file
 void addPokemon(FILE *fp){
     Pokemon newPokemon;
-
-    newPokemon.index = 
 
     printf("Pokemon Name: ");
     scanf("%s", newPokemon.name);
@@ -69,15 +68,10 @@ void addPokemon(FILE *fp){
 void readPokemon(FILE *fp, int index){
     Pokemon readPokemon;
 
-    printf("Enter Pokemon Index Number: ");
-    scanf("%d", &index);
-    system("cls");
-
     fseek(fp, index * sizeof(Pokemon), SEEK_SET);
-
     fread(&readPokemon, sizeof(Pokemon), 1, fp);
 
-    printf("Index Number: %d\n", index);
+    printf("Index Number: %d\n", index + 1);
     printf("Pokemon: %s\n", readPokemon.name);
     printf("Type: %s\n\n", readPokemon.type);
 }
@@ -86,23 +80,17 @@ void readPokemon(FILE *fp, int index){
 void editPokemon(FILE *fp, int index){
     Pokemon editPokemon;
 
-    printf("Enter Pokemon Index Number: ");
-    scanf("%d", &index);
-    system("cls");
-
     fseek(fp, index * sizeof(Pokemon), SEEK_SET);
+    fread(&editPokemon, sizeof(Pokemon), 1, fp);
 
-    fread(&readPokemon, sizeof(Pokemon), 1, fp);
-
-    printf("Index Number: %d\n", index);
+    printf("Index Number: %d\n", index + 1);
     printf("Pokemon: %s\n", editPokemon.name);
     printf("Type: %s\n\n", editPokemon.type);
 
-
-    printf("Change %s's Name: ");
+    printf("Change %s's Name: ", editPokemon.name);
     scanf("%s", editPokemon.name);
 
-    printf("Change %s's Type: ");
+    printf("Change %s's Type: ", editPokemon.name);
     scanf("%s", editPokemon.type);
 
     fseek(fp, index * sizeof(Pokemon), SEEK_SET);
@@ -133,9 +121,17 @@ int main(int argc, char *argv[]){
                 addPokemon(fp);
                 break;
             case 2:
+                printf("Enter Pokemon Index: ");
+                scanf("%d", &index);
+                index -= 1;
+                system("cls");
                 readPokemon(fp, index);
                 break;
             case 3:
+                printf("Enter Pokemon Index: ");
+                scanf("%d", &index);
+                index -= 1;
+                system("cls");
                 editPokemon(fp, index);
                 break;
             case 0:
