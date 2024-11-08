@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
     if(fp != NULL){
         fp = fopen(argv[1], "rb+");
     }else{
-        fp = fopen(argv[1], "wb+");
+        fp = fopen(argv[1], "wb");
     }
 
     fclose(fp);
