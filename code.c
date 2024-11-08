@@ -34,6 +34,8 @@ void addPokemon(FILE *fp){
 
     fseek(fp, 0, SEEK_END);
     fwrite(&newPokemon, sizeof(Pokemon), 1, fp);
+
+    fclose(fp);
 }
 
 // Find and Read data from a Pokemon
@@ -46,6 +48,8 @@ void readPokemon(FILE *fp, int index){
     printf("Index Number: %d\n", index + 1);
     printf("Pokemon: %s\n", readPokemon.name);
     printf("Type: %s\n\n", readPokemon.type);
+
+    fclose(fp);
 }
 
 // Edit existing Pokemon data
@@ -68,6 +72,7 @@ void editPokemon(FILE *fp, int index){
     fseek(fp, index * sizeof(Pokemon), SEEK_SET);
     fwrite(&editPokemon, sizeof(Pokemon), 1, fp);
     
+    fclose(fp);
 }
 
 int main(int argc, char *argv[]){
@@ -80,6 +85,8 @@ int main(int argc, char *argv[]){
         fp = fopen(argv[1], "wb+");
     }
 
+    fclose(fp);
+
     int user, index;
 
     while(1){
@@ -90,9 +97,11 @@ int main(int argc, char *argv[]){
 
         switch(user){
             case 1:
+                fopen(argv[1], "ab");
                 addPokemon(fp);
                 break;
             case 2:
+                fopen(argv[1], "rb+");
                 printf("Enter Pokemon Index: ");
                 scanf("%d", &index);
                 index -= 1;
@@ -100,6 +109,7 @@ int main(int argc, char *argv[]){
                 readPokemon(fp, index);
                 break;
             case 3:
+                fopen(argv[1], "rb+");
                 printf("Enter Pokemon Index: ");
                 scanf("%d", &index);
                 index -= 1;
